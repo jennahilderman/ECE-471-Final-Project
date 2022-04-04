@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import os
 
-duck_directory = "D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/duck_images/"
-test_frame_file = "D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/scene_images/frame_55.038.png"
+duck_directory = "D:/UVIC/9Spring2022Courses/ECE471/ECE-471-Final-Project/duck_images/"
+test_frame_file = "D:/UVIC/9Spring2022Courses/ECE471/ECE-471-Final-Project/scene_images/frame_55.038.png"
 
 
 def CallSift(current_frame, test_mode=False):
