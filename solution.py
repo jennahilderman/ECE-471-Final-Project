@@ -1,7 +1,5 @@
 import time
 
-from sift import CallSift
-import cv2
 """
 Replace following with your own algorithm logic
 
@@ -9,7 +7,7 @@ Two random coordinate generator has been provided for testing purposes.
 Manual mode where you can use your mouse as also been added for testing purposes.
 """
 def GetLocation(move_type, env, current_frame):
-    # time.sleep(1) #artificial one second processing time
+    time.sleep(1) #artificial one second processing time
     
     #Use relative coordinates to the current position of the "gun", defined as an integer below
     if move_type == "relative":
@@ -32,11 +30,7 @@ def GetLocation(move_type, env, current_frame):
         Upper left = (0,0)
         Bottom right = (W, H) 
         """
-        # coordinate = env.action_space_abs.sample()
-        result_rotate = cv2.rotate(current_frame, cv2.cv2.ROTATE_90_CLOCKWISE)
-        result_flip = cv2.flip(result_rotate, 1)
-        result_BGR = cv2.cvtColor(result_flip, cv2.COLOR_RGB2BGR)
-        coordinate = CallSift(result_BGR, test_mode = False)
-        # print(coordinate)
+        coordinate = env.action_space_abs.sample()
     
     return [{'coordinate' : coordinate, 'move_type' : move_type}]
+
