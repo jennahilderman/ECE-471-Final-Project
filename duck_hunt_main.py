@@ -25,7 +25,7 @@ print(f"OpenGym version: {gym.__version__} (=0.18.0)")
 def noop():
     return [{'coordinate': 8, 'move_type': 'relative'}]
 
-download_directory = "D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/scene_images/"
+download_directory = "./scene_images/"
 download_mode = False
 
 # Helper to download the current frame
