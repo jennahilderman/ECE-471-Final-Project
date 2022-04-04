@@ -7,8 +7,6 @@ test_frame_file = "D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/
 
 
 def CallSift(current_frame, test_mode=False):
-    # print("Running SIFT")
-    # read all duck images in directory D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/duck_images/
     duck_images = []
     folder = duck_directory
     for filename in os.listdir(folder):
@@ -16,8 +14,6 @@ def CallSift(current_frame, test_mode=False):
         if img is not None:
             duck_images.append(img)
 
-    # read scene image
-    # scene_image = cv2.imread("D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/scene_images/frame_1.018.png")
     scene_image = current_frame
     # convert images to grayscale
     duck_images = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

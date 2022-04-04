@@ -23,9 +23,24 @@ print(f"OpenGym version: {gym.__version__} (=0.18.0)")
 def noop():
     return [{'coordinate' : 8, 'move_type' : 'relative'}]
 
+download_directory = "D:/UVIC/9Spring2022Courses/ECE471/ece471_536-S2022/duck-hunt/scene_images/"
+download_mode = False
+
+# Helper to download the current frame
+def download_image(current_frame, filename):
+    """
+    Download the current frame from the game.
+    """
+    # convert filename to bgr
+    result_rotate = cv2.rotate(current_frame, cv2.cv2.ROTATE_90_CLOCKWISE)
+    result_flip = cv2.flip(result_rotate, 1)
+    result_BGR = cv2.cvtColor(result_flip, cv2.COLOR_RGB2BGR)
+    cv2.imwrite(filename, result_BGR)
+
 """ Here is the main loop for your algorithm """
 def main(args):
-    
+    time_to_dl = 1
+    dl_counter = 0
     future = None
     executor = mp.Pool(processes=4)
 
@@ -80,6 +95,14 @@ def main(args):
             current_frame, level_done, game_done, info = env.step(coordinate, move_type)
             if level_done or game_done:
                 break
+
+        # check if time reached time_to_dl
+        # if info['time'] exists
+        level_time = info.get("time")
+        if level_time and download_mode:
+            if level_time > time_to_dl:
+                time_to_dl = int(time_to_dl) + 6
+                download_image(current_frame, download_directory + "frame_" + str(dl_counter) + "_" + time.strftime("%Y%m%d-%H%M%S") + ".png")
 
         if level_done:
             """ Indicates the level has finished. Any post-level cleanup your algorithm may need """
