@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 
-duck_directory = "./duck_images/"
+duck_directory = "./duck_images_short/"
 test_frame_file = "./scene_images/frame_55.038.png"
 
 def CallSift(current_frame, test_mode=False):
@@ -12,6 +12,7 @@ def CallSift(current_frame, test_mode=False):
         img = cv2.imread(os.path.join(folder, filename))
         if img is not None:
             duck_images.append(img)
+            cv2.imshow('img',img)
 
     scene_image = current_frame
     # convert images to grayscale
