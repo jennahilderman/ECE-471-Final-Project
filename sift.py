@@ -1,3 +1,8 @@
+#https://www.thepythoncode.com/article/sift-feature-extraction-using-opencv-in-python
+#https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_sift_intro/py_sift_intro.html#sift-in-opencv
+#https://www.analyticsvidhya.com/blog/2019/10/detailed-guide-powerful-sift-technique-image-matching-python/
+#https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html
+
 import cv2
 import numpy as np
 import os
