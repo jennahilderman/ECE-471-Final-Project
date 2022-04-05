@@ -106,8 +106,8 @@ def main(args):
         # if info['time'] exists
         level_time = info.get("time")
         if level_time and download_mode:
-            if level_time > time_to_dl:
-                time_to_dl = int(time_to_dl) + 6
+            # if level_time > time_to_dl:
+            #     time_to_dl = int(time_to_dl) + 1
                 download_image(current_frame, download_directory + "frame_" + str(dl_counter) + "_" + time.strftime("%Y%m%d-%H%M%S") + ".png")
 
         if level_done:
