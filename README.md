@@ -4,6 +4,8 @@ Current best solution is using motion detection, mode has to be absolute.
 
 Run `python duck_hunt_main.py -m absolute`
 
+# Update Changes
+
 2022-03-27
 
 * Added duck_hunt_main_mp.py that uses multiprocess instead of the threads for faster solution processing.  You **cannot** pass the **env** variable to your GetLocation as it is not serializable.
