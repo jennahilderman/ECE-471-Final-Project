@@ -26,7 +26,6 @@ def noop():
 download_directory = "./scene_images/"
 download_mode = False
 
-
 # Helper to download the current frame
 def download_image(current_frame, filename):
     """
@@ -121,7 +120,7 @@ if __name__ == "__main__":
     desc="ECE 471 - Duck Hunt Challenge"
     parser = argparse.ArgumentParser(description=desc)
     parser.add_argument("-m", "--move-type", 
-            default="relative", choices=["relative", "absolute", "manual"], 
+            default="absolute", choices=["relative", "absolute", "manual"], 
             help="Use relative or absolute coordinates, for testing purposes.  You may switch between modes in your algorithm. Manual mode use mouse to move (experimental, untested on Windows)")
     parser.add_argument("-a", "--move-amount", type=int, default=1,
             help="When using relative coordinates, set the delta move amount (default=1)")

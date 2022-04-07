@@ -2,6 +2,7 @@ import time
 
 from sift import CallSift
 from motion import CallMotion
+from tensor_code import tensor_main
 
 import cv2
 """
@@ -38,15 +39,16 @@ def GetLocation(move_type, env, current_frame):
         Bottom right = (W, H) 
         """
         # coordinate = env.action_space_abs.sample()
-        
         result_rotate = cv2.rotate(current_frame, cv2.cv2.ROTATE_90_CLOCKWISE)
         result_flip = cv2.flip(result_rotate, 1)
-        result_BGR = cv2.cvtColor(result_flip, cv2.COLOR_RGB2BGR)  
+        result_BGR = cv2.cvtColor(result_flip, cv2.COLOR_RGB2BGR)
+        
+        # 1. SIFT Feature Matching Solution
+        # coordinate = CallSift(result_BGR, test_mode = False)
+    
+        # 2. Motion detection solution
         coordinate = CallMotion(result_BGR, test_mode = False)
-        result_BGR = cv2.cvtColor(current_frame, cv2.COLOR_RGB2BGR)
-        #load_ssd_model("duck_images\duck_data\config_file.config")
-        print(coordinate)
-        coordinate = CallSift(result_BGR, test_mode = False)
-        print(coordinate)
+
+        # print(coordinate)
         
     return [{'coordinate' : coordinate, 'move_type' : move_type}]
