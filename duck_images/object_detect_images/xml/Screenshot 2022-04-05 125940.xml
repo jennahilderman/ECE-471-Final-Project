@@ -1,0 +1,26 @@
+<annotation>
+	<folder>object_detect_images</folder>
+	<filename>Screenshot 2022-04-05 125940.png</filename>
+	<path>C:\Users\Aiden Macdonald\Documents\GitHub\ECE-471-Final-Project\duck_images\object_detect_images\Screenshot 2022-04-05 125940.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1026</width>
+		<height>800</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>blue</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>90</xmin>
+			<ymin>231</ymin>
+			<xmax>162</xmax>
+			<ymax>294</ymax>
+		</bndbox>
+	</object>
+</annotation>
