@@ -2,6 +2,7 @@ import time
 
 from sift import CallSift
 from motion import CallMotion
+from lastAttempt import last_attempt
 
 import cv2
 """
@@ -45,8 +46,9 @@ def GetLocation(move_type, env, current_frame):
         coordinate = CallMotion(result_BGR, test_mode = False)
         result_BGR = cv2.cvtColor(current_frame, cv2.COLOR_RGB2BGR)
         #load_ssd_model("duck_images\duck_data\config_file.config")
-        print(coordinate)
-        coordinate = CallSift(result_BGR, test_mode = False)
+        # print(coordinate)
+        # coordinate = CallSift(result_BGR, test_mode = False)
+        coordinate = last_attempt(result_BGR)
         print(coordinate)
         
     return [{'coordinate' : coordinate, 'move_type' : move_type}]
