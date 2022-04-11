@@ -44,10 +44,10 @@ def GetLocation(move_type, env, current_frame):
         result_BGR = cv2.cvtColor(result_flip, cv2.COLOR_RGB2BGR)
         
         # 1. SIFT Feature Matching Solution
-        coordinate = CallSift(result_BGR, test_mode = False)
+        # coordinate = CallSift(result_BGR, test_mode = False)
     
         # 2. Motion detection solution
-        # coordinate = CallMotion(result_BGR, test_mode = False)
+        coordinate = CallMotion(result_BGR, test_mode = False)
 
         # print(coordinate)
         
