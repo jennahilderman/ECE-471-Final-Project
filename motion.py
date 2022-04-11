@@ -65,7 +65,6 @@ def CallMotion(current_frame, test_mode=False):
             # too small: skip!
             continue
         
-        print(cv2.contourArea(contour))
         (x, y, w, h) = cv2.boundingRect(contour)
 
         # This is a case where crosshair gets stuck at the bottom
@@ -73,16 +72,16 @@ def CallMotion(current_frame, test_mode=False):
         if y > current_frame.shape[0] - 42:
             continue
 
-        # If contour is around a box of size 40-42 (crosshair), skip
-        # Usually w and h around 40 - 42
-        if 38 <= w <= 42 and 38 <= h <= 42:
+        # If contour is around a box of size 38 - 44 (crosshair), skip
+        # Usually w and h around 38 - 44
+        if 38 <= w <= 44 and 38 <= h <= 44:
             continue
 
         # Falling ducks are being detected and being shot at. 
         # Thus, bounding boxes that are shaped vertically with their heights being more than their width, are filtered out
         if w < h:
             continue
-
+        print("Motion detected at: ", x, y, w, h)
         if not test_mode:
             return ((x + (x + w)) / 2, (y + (y + w)) / 2)
 
