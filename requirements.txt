@@ -10,3 +10,4 @@ typing_extensions==4.0.1
 keras
 matplotlib
 tensorflow-gpu
+pandas

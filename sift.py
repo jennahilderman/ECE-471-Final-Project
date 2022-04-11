@@ -1,14 +1,12 @@
-#https://www.thepythoncode.com/article/sift-feature-extraction-using-opencv-in-python
-#https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_feature2d/py_sift_intro/py_sift_intro.html#sift-in-opencv
-#https://www.analyticsvidhya.com/blog/2019/10/detailed-guide-powerful-sift-technique-image-matching-python/
-#https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html
+# SIFT Feature Matching steps referred from : https://www.thepythoncode.com/article/sift-feature-extraction-using-opencv-in-python
+# FLANN and BFMatcher steps referred from : https://docs.opencv.org/4.x/dc/dc3/tutorial_py_matcher.html
 
 import cv2
 import numpy as np
 import os
 
 duck_directory = "./duck_images_short/"
-test_frame_file = "./scene_images/frame_55.038.png"
+test_frame_file = "./scene_images/frame_0_20220404-155321.png"
 
 def CallSift(current_frame, test_mode=False):
     duck_images = []
@@ -20,24 +18,27 @@ def CallSift(current_frame, test_mode=False):
             cv2.imshow('img',img)
 
     scene_image = current_frame
-    # convert images to grayscale
+    
+    # Preprocess images to grayscale
     duck_images = [cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                    for img in duck_images]
     scene_image = cv2.cvtColor(scene_image, cv2.COLOR_BGR2GRAY)
-    # create SIFT object
+    
+    # Create SIFT object
     sift = cv2.SIFT_create()
-    # detect SIFT features from duck images
+    
+    # Extract SIFT features from duck images
     keypoints_duck = []
     descriptors_duck = []
     result = [sift.detectAndCompute(img, None) for img in duck_images]
     keypoints_duck = [res[0] for res in result]
     descriptors_duck = [res[1] for res in result]
 
-    # detect SIFT features from scene image
+    # Detect keypoints and compute descriptors
     keypoints_scene, descriptors_scene = sift.detectAndCompute(
         scene_image, None)
 
-    # feature match each duck descriptor/keypoint with scene descriptor/keypoint
+    # Feature match each duck descriptor/keypoint with scene descriptor/keypoint
     for i in range(len(descriptors_duck)):
         img1 = duck_images[i]
         keypoints_1 = keypoints_duck[i]
@@ -46,7 +47,7 @@ def CallSift(current_frame, test_mode=False):
         desc1 = descriptors_duck[i]
         desc2 = descriptors_scene
 
-        # BFMatcher
+        # Brute Force Matcher
         # # create feature matcher
         # bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
         # # match descriptors of both images
@@ -62,7 +63,7 @@ def CallSift(current_frame, test_mode=False):
 
         ##########
 
-        # KNN
+        # FLANN KNN
         FLANN_INDEX_KDTREE = 0
         des1 = np.float32(desc1)
         des2 = np.float32(desc2)
@@ -72,21 +73,20 @@ def CallSift(current_frame, test_mode=False):
 
         matches = flann.knnMatch(des1,des2,k=2)
 
-        # store all the good matches as per Lowe's ratio test.
+        # Store all the good matches as per Lowe's ratio test.
         good_matches = []
         for m,n in matches:
-            if m.distance < 0.3*n.distance:
+            if m.distance < 0.7*n.distance:
                 good_matches.append(m)
         ##########
 
-        # if good_matches does not have at least 4 matches, means no match
+        # If good_matches does not have at least 4 matches, means no match
         if len(good_matches) >= 4:
 
             src_pts = np.float32(
                 [keypoints_1[m.queryIdx].pt for m in good_matches]).reshape(-1, 1, 2)
             dst_pts = np.float32(
                 [keypoints_scene[m.trainIdx].pt for m in good_matches]).reshape(-1, 1, 2)
-            # print(dst_pts)
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
             if M is not None:
                 matchesMask = mask.ravel().tolist()
@@ -98,41 +98,37 @@ def CallSift(current_frame, test_mode=False):
 
                 # img3 = cv2.drawMatches(img1,keypoints_1,scene_image,keypoints_scene,matches[:50], None,**draw_params)
                 if test_mode:
-                    draw_params = dict(matchColor=(0, 0, 255),  # draw matches in green color
+                    draw_params = dict(matchColor=(255, 0, 0),  # Draw matched feature lines in blue color
                                        singlePointColor=None,
-                                       matchesMask=matchesMask,  # draw only inliers
+                                       matchesMask=matchesMask,
                                        flags=2)
 
-                    img3 = cv2.drawMatches(img1,keypoints_1,img2,keypoints_scene,good_matches,None,**draw_params) # for knn
+                    img3 = cv2.drawMatches(img1,keypoints_1,img2,keypoints_scene,good_matches,None,**draw_params) # for FLANN
                     # img3 = cv2.drawMatches(img1, keypoints_1, scene_image, keypoints_scene,
-                    #                        matches[:50], None, flags=2)  # for euclidian distance
+                    #                        matches[:50], None, flags=2)  # for BFMatcher
 
-                    # Draw bounding box in Red
+                    # Draw red bounding box
                     img3 = cv2.polylines(
                         img3, [np.int32(dst)], True, (0, 0, 255), 3, cv2.LINE_AA)
 
                 if not test_mode:
-                    # get the middle point of the bounding box or 4 points of dst
-                    # print(dst)
-
-                    # print(centroid)
+                    # Get the middle point of the bounding box or 4 points of dst
                     dst_moffset = dst - (w, 0)
                     x = [p[0][0] for p in dst_moffset]
                     y = [p[0][1] for p in dst_moffset]
                     centroid = ((max(x) + min(x))/2, (max(y) + min(y))/2)
-                    # print("Returning " + str(centroid))
                     return centroid
             else:
                 if test_mode:
-                    img3 = cv2.drawMatches(img1, keypoints_1, img2, keypoints_2, matches[0][:50], img2, flags=2) # for knn
+                    img3 = cv2.drawMatches(img1, keypoints_1, img2, keypoints_2, matches[0][:50], img2, flags=2) # for FLANN
                     # img3 = cv2.drawMatches(img1, keypoints_1, scene_image, keypoints_scene,
-                    #                       matches[:50], None, flags=2)  # for euclidian distance
+                    #                       matches[:50], None, flags=2)  # for BFMatcher
 
         else:
             if test_mode:
-                img3 = cv2.drawMatches(img1, keypoints_1, img2, keypoints_2, matches[0][:50], img2, flags=2) # for knn
+                img3 = cv2.drawMatches(img1, keypoints_1, img2, keypoints_2, matches[0][:50], img2, flags=2) # for FLANN
                 # img3 = cv2.drawMatches(img1, keypoints_1, scene_image, keypoints_scene,
-                #                        matches[:50], None, flags=2)  # for euclidian distance
+                #                        matches[:50], None, flags=2)  # for BFMatcher
 
         if test_mode:
             cv2.imshow("result", img3)
